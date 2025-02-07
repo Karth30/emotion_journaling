@@ -1,10 +1,9 @@
-import gensim
+from collections import defaultdict
 import joblib
 from nltk.corpus import stopwords
 from nltk import sent_tokenize
 from gensim.utils import simple_preprocess
 from nltk.stem import WordNetLemmatizer
-import pickle
 import numpy as np
 
 lemmatizer=WordNetLemmatizer()
@@ -44,5 +43,10 @@ def predict_emotion(text):
 
 # Test Example
 if __name__ == "__main__":
-    test_sentence=input("Enter sentence: ")
-    print(f"Predicted Emotion: {predict_emotion(test_sentence)}")
+    emotions=defaultdict(int)
+    journal=input("Enter journal: ")
+    test_sentence=sent_tokenize(journal)
+    for sentence in test_sentence:
+        emotion=predict_emotion(sentence)
+        emotions[emotion]+=1
+    print(f"Predicted Emotion: {dict(emotions)}")
