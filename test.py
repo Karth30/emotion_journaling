@@ -1,52 +1,83 @@
-from collections import defaultdict
 import joblib
-from nltk.corpus import stopwords
-from nltk import sent_tokenize
-from gensim.utils import simple_preprocess
-from nltk.stem import WordNetLemmatizer
 import numpy as np
+from collections import defaultdict
+from nltk.tokenize import sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from gensim.utils import simple_preprocess
+import tensorflow as tf
 
-lemmatizer=WordNetLemmatizer()
-stop_words = set(stopwords.words('english')) 
+# Load model, tokenizer, and label encoder
+model = tf.keras.models.load_model("model/biLSTM.keras")
+tokenizer = joblib.load("model/tokenizer.joblib")
+label_encoder = joblib.load("model/label_encoder.joblib")
 
-# Load Word2Vec Model
-#word2vec_model = gensim.models.Word2Vec.load("model/word2vec_model.bin")
-# Loading the model
-word2vec_model = joblib.load('model/word2vec_model.joblib')
+# Initialize lemmatizer and stopwords
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words("english"))
 
-# Load Trained ML Model
-#with open("model/emotion_classifier_logistic.pkl", "rb") as file:
-    #loaded_model = pickle.load(file)
-loaded_model=joblib.load('model/emotion_classifier_logistic.joblib')
+# Define max sequence length (same as training)
+max_len = 100  
+confidence_threshold = 0.6  # Only consider emotions above this probability
 
-# Preprocessing Function
+
 def preprocess_text(text):
-    words = []
-    sent_token = sent_tokenize(text)  # Sentence tokenization
-    for sent in sent_token:
-        tokens = simple_preprocess(sent)  # Word tokenization & preprocessing
-        filtered_tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]  # Remove stopwords and lemmatize
-        words.extend(filtered_tokens)
-    return words
-
-# Define Function to Get Sentence Vector
-def avg_word2vec(doc):
-    vectors = [word2vec_model.wv[word] for word in doc if word in word2vec_model.wv.index_to_key]
-    return np.mean(vectors, axis=0) if vectors else np.zeros(word2vec_model.vector_size)
-
-def predict_emotion(text):
-    text_preprocessed = preprocess_text(text)
-    text_vector = np.array([avg_word2vec(text_preprocessed)])  
-    predicted_emotion = loaded_model.predict(text_vector)[0] 
-    return predicted_emotion
+    """Tokenize, remove stopwords, and lemmatize input text."""
+    words = simple_preprocess(text)
+    words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words]
+    return " ".join(words)
 
 
-# Test Example
+def predict_emotion(sentence):
+    """Predict emotion and return the emotion with confidence score."""
+    processed_sentence = preprocess_text(sentence)
+
+    # Convert text to sequence
+    sequence = tokenizer.texts_to_sequences([processed_sentence])
+    padded_sequence = pad_sequences(sequence, maxlen=max_len, padding="post", truncating="post")
+
+    # Make prediction
+    prediction = model.predict(padded_sequence)[0]  # Get probability distribution
+
+    # Get the most probable emotion
+    max_prob = np.max(prediction)
+    predicted_label = np.argmax(prediction)
+    predicted_emotion = label_encoder.inverse_transform([predicted_label])[0]
+
+    # Return emotion only if confidence is above the threshold
+    if max_prob >= confidence_threshold:
+        return predicted_emotion
+    else:
+        return "Neutral"  # Ignore low-confidence predictions
+
+
+# User Input
 if __name__ == "__main__":
-    emotions=defaultdict(int)
-    journal=input("Enter journal: ")
-    test_sentence=sent_tokenize(journal)
-    for sentence in test_sentence:
-        emotion=predict_emotion(sentence)
-        emotions[emotion]+=1
-    print(f"Predicted Emotion: {dict(emotions)}")
+    emotions = defaultdict(int)
+    journal = input("Enter your journal entry: ")
+
+    # Tokenize into sentences
+    sentences = sent_tokenize(journal)
+
+    # Predict emotions for each sentence
+    for sentence in sentences:
+        emotion = predict_emotion(sentence)
+        if emotion != "Neutral":  # Ignore sentences with no strong emotion
+            emotions[emotion] += 1
+
+    # Find the dominant emotion (if any)
+    if emotions:
+        dominant_emotion = max(emotions, key=emotions.get)
+    else:
+        dominant_emotion = "Neutral"
+
+    # Display results
+    print("\nSentence-wise Emotion Predictions:")
+    for sentence in sentences:
+        emotion = predict_emotion(sentence)
+        if emotion != "Neutral":
+            print(f"➡ {sentence}  →  {emotion}")
+
+    print("\nOverall Emotion Count:", dict(emotions))
+    print(f"\n🧠 Predicted Dominant Emotion: {dominant_emotion} 🎭")
