@@ -15,7 +15,7 @@ label_encoder = joblib.load("model/label_encoder.joblib")
 
 # Initialize lemmatizer and stopwords
 lemmatizer = WordNetLemmatizer()
-stop_words = set(stopwords.words("english"))
+stop_words = set(stopwords.words("english")) - {"not", "no", "never"}
 
 # Define max sequence length (same as training)
 max_len = 100  
