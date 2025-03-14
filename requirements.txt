@@ -9,3 +9,4 @@ gensim
 tensorflow
 keras
 streamlit
+bcrypt
