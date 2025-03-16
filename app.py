@@ -10,6 +10,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import tensorflow as tf
 from supabase import create_client, Client
 import bcrypt
+import nltk
 
 # Load model and utilities
 model = tf.keras.models.load_model("model/biLSTM.keras")
@@ -18,6 +19,7 @@ label_encoder = joblib.load("model/label_encoder.joblib")
 
 # Initialize NLP tools
 lemmatizer = WordNetLemmatizer()
+nltk.download('stopwords')
 stop_words = set(stopwords.words("english")) - {"not", "no", "never"}
 
 # Parameters
