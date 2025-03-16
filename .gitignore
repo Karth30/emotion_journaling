@@ -12,6 +12,7 @@ ENV/
 emotion_detect_env/
 env.bak/
 venv.bak/
+.streamlit/
 
 # Distribution / packaging
 .Python

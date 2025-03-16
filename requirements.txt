@@ -10,3 +10,5 @@ tensorflow
 keras
 streamlit
 bcrypt
+supabase
+cryptography
