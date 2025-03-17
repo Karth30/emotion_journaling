@@ -20,6 +20,7 @@ label_encoder = joblib.load("model/label_encoder.joblib")
 # Initialize NLP tools
 lemmatizer = WordNetLemmatizer()
 nltk.download('stopwords')
+nltk.download('wordnet')
 stop_words = set(stopwords.words("english")) - {"not", "no", "never"}
 
 # Parameters
