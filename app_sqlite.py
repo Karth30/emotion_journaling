@@ -11,7 +11,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 # Load model and utilities
-model = tf.keras.models.load_model("model/biLSTM.keras")
+model = tf.keras.models.load_model("model/biLSTM+CNN.keras")
 tokenizer = joblib.load("model/tokenizer.joblib")
 label_encoder = joblib.load("model/label_encoder.joblib")
 
@@ -21,7 +21,7 @@ stop_words = set(stopwords.words("english")) - {"not", "no", "never"}
 
 # Parameters
 max_len = 100
-confidence_threshold = 0.3
+confidence_threshold = 0.4
 
 # SQLite Database Setup
 def init_db():
@@ -184,12 +184,38 @@ def main():
             st.write(f"**Soft Prediction (Most Probable Emotion):** {soft_emotion}")
 
             st.subheader("📊 Emotion Distribution")
-            fig, ax = plt.subplots()
-            ax.bar(label_encoder.classes_, emotion_scores, color="skyblue")
-            ax.set_ylabel("Probability")
-            ax.set_xlabel("Emotions")
-            ax.set_title("Emotion Distribution Across Journal")
+
+            # Create figure and axis with better size and clarity
+            fig, ax = plt.subplots(figsize=(10, 6))
+
+            # Use a vibrant color palette for better visual impact
+            colors = plt.cm.Paired(np.linspace(0, 1, len(label_encoder.classes_)))
+
+            # Enhanced bar chart with styling
+            ax.bar(label_encoder.classes_, emotion_scores, color=colors, edgecolor='black', linewidth=1.2, alpha=0.85)
+
+            # Add labels and title with improved styling
+            ax.set_ylabel("Probability", fontsize=12, fontweight='bold')
+            ax.set_xlabel("Emotions", fontsize=12, fontweight='bold')
+            ax.set_title("🌟 Emotion Distribution Across Journal", fontsize=16, fontweight='bold')
+
+            # Rotate x-axis labels for better readability
+            plt.xticks(rotation=45, fontsize=10)
+
+            # Add a grid for clarity
+            ax.grid(axis='y', linestyle='--', linewidth=0.5, alpha=0.7)
+
+            # Add data labels on top of the bars for better insight
+            for i, v in enumerate(emotion_scores):
+                ax.text(i, v + 0.01, f"{v:.2f}", ha='center', fontsize=10, fontweight='bold')
+
+            # Set background for better contrast
+            fig.patch.set_facecolor('#F5F5F5')
+            ax.set_facecolor('#FAFAFA')
+
+            # Display the improved plot
             st.pyplot(fig)
+
 
         if st.button("View Previous Journals"):
             journals = get_previous_journals(st.session_state.user_id)
@@ -203,13 +229,34 @@ def main():
 
             if dates and emotions:
                 st.subheader("📈 Emotion Trend Over Time")
-                fig, ax = plt.subplots()
-                ax.plot(dates[::-1], emotions[::-1], marker='o', linestyle='-', color='green')
-                ax.set_xlabel("Date")
-                ax.set_ylabel("Soft Emotion")
-                ax.set_title("Your Emotion Over Time")
-                plt.xticks(rotation=45)
+                fig, ax = plt.subplots(figsize=(10, 6))
+
+                # Gradient-like color for better visualization
+                colors = plt.cm.viridis(np.linspace(0, 1, len(dates)))
+
+                # Plot with improved styling
+                ax.scatter(dates[::-1], emotions[::-1], c=colors, edgecolor='black', linewidth=1.2, s=100, label="Emotion Points")
+                ax.plot(dates[::-1], emotions[::-1], linestyle='--', color='green', alpha=0.7, linewidth=2, label="Emotion Trend")
+
+                # Customize labels and title
+                ax.set_xlabel("Date", fontsize=12, fontweight='bold')
+                ax.set_ylabel("Soft Emotion", fontsize=12, fontweight='bold')
+                ax.set_title("💚 Your Emotion Over Time", fontsize=16, fontweight='bold')
+
+                # Improve x-axis readability
+                plt.xticks(rotation=45, fontsize=10)
+                ax.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+
+                # Add a legend for clarity
+                ax.legend(loc="upper left", fontsize=10, frameon=True, facecolor="white", edgecolor="black")
+
+                # Add a background color
+                fig.patch.set_facecolor('#F5F5F5')
+                ax.set_facecolor('#FAFAFA')                                     
+
+                # Display the plot
                 st.pyplot(fig)
+
 
 if __name__ == '__main__':
     main()
