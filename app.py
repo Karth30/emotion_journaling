@@ -189,7 +189,7 @@ def main():
             # Add labels and title with improved styling
             ax.set_ylabel("Probability", fontsize=12, fontweight='bold')
             ax.set_xlabel("Emotions", fontsize=12, fontweight='bold')
-            ax.set_title("🌟 Emotion Distribution Across Journal", fontsize=16, fontweight='bold')
+            ax.set_title("Emotion Distribution Across Journal", fontsize=16, fontweight='bold')
 
             # Rotate x-axis labels for better readability
             plt.xticks(rotation=45, fontsize=10)
@@ -213,8 +213,6 @@ def main():
             dates = []
             emotions = []
             for entry in journals:
-                st.write(f"📅 {entry['timestamp']}: **{entry['hard_emotion']}** | {entry['soft_emotion']}")
-                st.write(f"📝 {entry['journal']}")
                 dates.append(entry['timestamp'])
                 emotions.append(entry['soft_emotion'])
 
@@ -232,7 +230,7 @@ def main():
                 # Customize labels and title
                 ax.set_xlabel("Date", fontsize=12, fontweight='bold')
                 ax.set_ylabel("Soft Emotion", fontsize=12, fontweight='bold')
-                ax.set_title("💚 Your Emotion Over Time", fontsize=16, fontweight='bold')
+                ax.set_title(" Your Emotion Over Time", fontsize=16, fontweight='bold')
 
                 # Improve x-axis readability
                 plt.xticks(rotation=45, fontsize=10)
@@ -246,7 +244,12 @@ def main():
                 ax.set_facecolor('#FAFAFA')                                     
 
                 # Display the plot
+                ax.set_xticklabels([])
                 st.pyplot(fig)
 
+            for entry in journals:
+                st.write(f"📅 {entry['timestamp']}: **{entry['hard_emotion']}** | {entry['soft_emotion']}")
+                st.write(f"📝 {entry['journal']}")
+                
 if __name__ == '__main__':
     main()
