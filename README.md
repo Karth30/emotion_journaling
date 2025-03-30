@@ -3,6 +3,9 @@
 ## 📌 Overview
 The **Emotion Detection & Journaling Web App** is an AI-powered platform that allows users to log their daily emotions and track their mood trends over time. It utilizes a **Bi-Directional LSTM + CNN model** to analyze user inputs and predict emotions, providing insightful visualizations to help users understand their emotional patterns.
 
+## 🌐 Live Web App
+Try out the Emotion Journaling Web App here: [Emotion Journaling App](https://emotion-detection-mlproject.streamlit.app/)
+
 ## 🚀 Features
 - **Emotion Detection**: Uses a deep learning model to classify emotions from text.
 - **Sentence-wise Emotion Analysis**: Breaks down journal entries sentence by sentence and assigns emotions.
@@ -20,7 +23,7 @@ The **Emotion Detection & Journaling Web App** is an AI-powered platform that al
 ## ⚡ Installation & Setup
 ### Prerequisites
 Ensure you have the following installed:
-- Python 3.8+
+- Python 3.10
 - Virtual environment (optional but recommended)
 
 ### Steps to Run the Project
