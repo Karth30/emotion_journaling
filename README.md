@@ -1,12 +1,12 @@
 # Emotion Detection & Journaling Web App
 
-## 📌 Overview
+## Overview
 The **Emotion Detection & Journaling Web App** is an AI-powered platform that allows users to log their daily emotions and track their mood trends over time. It utilizes a **Bi-Directional LSTM + CNN model** to analyze user inputs and predict emotions, providing insightful visualizations to help users understand their emotional patterns.
 
-## 🌐 Live Web App
+## Live Web App
 Try out the Emotion Journaling Web App here: [Emotion Journaling App](https://emotion-detection-mlproject.streamlit.app/)
 
-## 🚀 Features
+## Features
 - **Emotion Detection**: Uses a deep learning model to classify emotions from text.
 - **Sentence-wise Emotion Analysis**: Breaks down journal entries sentence by sentence and assigns emotions.
 - **Hard & Soft Emotion Categorization**: Provides both granular (sentence-level) and overall (soft) emotion scores.
@@ -20,7 +20,7 @@ Try out the Emotion Journaling Web App here: [Emotion Journaling App](https://em
 - **Database**: Supabase (used for storing user journal entries and emotion trends)
 - **Visualization**: Matplotlib, Seaborn
 
-## ⚡ Installation & Setup
+## Installation & Setup
 ### Prerequisites
 Ensure you have the following installed:
 - Python 3.10
@@ -46,17 +46,17 @@ Ensure you have the following installed:
    streamlit run app.py
    ```
 
-## 📊 Emotion Trend Visualization
+## Emotion Trend Visualization
 - Each journal entry is analyzed sentence-wise to predict emotions.
 - The **soft emotion** (overall emotion) is stored in the **Supabase database** for long-term trend analysis.
 - Users can track their **emotional progress over time** using interactive graphs.
 
-## 📝 Usage
+## Usage
 1. **Enter your journal entry**, and the AI model will predict emotions for each sentence.
 2. **View the overall soft emotion**, which is saved for tracking trends.
 3. **Analyze emotion trends over time** with visualizations.
 
-## 📂 Project Structure
+## Project Structure
 ```
 ├── app.py                  # Main Streamlit application
 ├── model/                  # Contains pre-trained ML and DL models
@@ -64,12 +64,6 @@ Ensure you have the following installed:
 ├── requirements.txt        # List of dependencies
 ├── README.md               # Project documentation
 ```
-
-## 💡 Contributing
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
-
-## 📜 License
-This project is licensed under the MIT License.
 
 
 
