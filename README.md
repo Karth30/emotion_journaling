@@ -14,7 +14,7 @@ Try out the Emotion Journaling Web App here: [Emotion Journaling App](https://em
 - **Trend Visualization**: Interactive graphs to display emotion trends over time.
 - **Modern UI**: Clean and intuitive interface using Streamlit.
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: Streamlit
 - **Deep Learning**: Bi-Directional LSTM + CNN (TensorFlow/Keras)
 - **Database**: Supabase (used for storing user journal entries and emotion trends)
