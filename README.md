@@ -29,7 +29,7 @@ Ensure you have the following installed:
 ### Steps to Run the Project
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/kashika13/emotion_detection.git
+   git clone https://github.com/Karth30/emotion_detection.git
    cd emotion_detection
    ```
 2. **Create a virtual environment (optional but recommended)**
